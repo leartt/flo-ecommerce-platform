@@ -14,6 +14,7 @@ const UserRoleSchema = new Schema({
       ROLE_TYPE.admin,
       ROLE_TYPE.superadmin,
     ],
+    unique: true,
     required: true,
     default: ROLE_TYPE.basic,
     lowercase: true,
@@ -22,9 +23,7 @@ const UserRoleSchema = new Schema({
     type: [String],
     required: true,
     default: function () {
-      const privilegesAssigned = assignUserPrivileges(this.value);
-      if (!privilegesAssigned) return null;
-      return privilegesAssigned;
+      return assignUserPrivileges(this.value);
     },
   },
 });

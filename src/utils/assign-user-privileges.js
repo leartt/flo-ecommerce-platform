@@ -25,6 +25,6 @@ module.exports = function (role) {
       ];
 
     default:
-      return false;
+      return undefined;
   }
 };
