@@ -2,6 +2,9 @@ const ROLE_TYPE = require("./role-types");
 
 module.exports = function (role) {
   switch (role) {
+    case ROLE_TYPE.basic:
+      return ["edit_profile"];
+
     case ROLE_TYPE.editor:
       return ["add_product", "edit_product"];
 
