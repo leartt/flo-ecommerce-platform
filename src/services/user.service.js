@@ -1,5 +1,4 @@
 const UserModel = require("../models/user.model");
-const ApplicationError = require("../utils/ApplicationError");
 
 const addNewUser = async (user) => {
   const newUser = new UserModel(user);
@@ -17,8 +16,14 @@ const getUserById = async (id) => {
   return user;
 };
 
+const deleteUserById = async (id) => {
+  const deletedCount = await UserModel.deleteOne({ _id: id });
+  return deletedCount > 0;
+};
+
 module.exports = {
   addNewUser,
   getUsers,
   getUserById,
+  deleteUserById,
 };

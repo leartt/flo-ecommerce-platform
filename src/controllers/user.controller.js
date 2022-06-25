@@ -49,8 +49,27 @@ const handleGetUserById = async (req, res, next) => {
   }
 };
 
+const handleDeleteUserById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const isDeleted = await UserService.deleteUserById(id);
+    if (!isDeleted) {
+      throw new ApplicationError(
+        500,
+        "The user doesn't exist or can't be deleted"
+      );
+    }
+    res
+      .status(200)
+      .json({ success: true, message: "User deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   handleAddNewUser,
   handleGetUserById,
   handleGetUsers,
+  handleDeleteUserById,
 };
