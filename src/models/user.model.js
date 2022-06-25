@@ -1,6 +1,8 @@
 const validator = require("validator");
-
 const mongoose = require("mongoose");
+const UserRoleModel = require("./user-role.model");
+
+const ROLE_TYPE = require("../utils/role-types");
 
 const { Schema } = mongoose;
 
@@ -28,6 +30,7 @@ const UserSchema = new Schema(
     password: {
       type: String,
       required: ["Password is required"],
+      minLength: [6, "Password should be at least 6 characters long"],
     },
     role: {
       type: Schema.Types.ObjectId,
@@ -36,6 +39,19 @@ const UserSchema = new Schema(
   },
   { timestamps: true }
 );
+
+UserSchema.pre("save", async function (next) {
+  try {
+    if (!this.role) {
+      // query the userrole document, get BASIC ROLE id and assign as default role
+      const basicRole = await UserRoleModel.findOne({ value: ROLE_TYPE.basic });
+      this.role = basicRole._id;
+    }
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 
 const UserModel = mongoose.model("User", UserSchema);
 
