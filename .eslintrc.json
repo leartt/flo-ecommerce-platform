@@ -14,6 +14,8 @@
     "no-console": "off",
     "no-unused-vars": "warn",
     "func-names": "off",
-    "arrow-body-style": "off"
+    "arrow-body-style": "off",
+    "object-shorthand": "warn",
+    "no-underscore-dangle": "off"
   }
 }
