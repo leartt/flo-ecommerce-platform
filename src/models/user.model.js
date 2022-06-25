@@ -1,8 +1,10 @@
 const validator = require("validator");
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 const UserRoleModel = require("./user-role.model");
 
 const ROLE_TYPE = require("../utils/role-types");
+const ApplicationError = require("../utils/ApplicationError");
 
 const { Schema } = mongoose;
 
@@ -44,12 +46,26 @@ UserSchema.pre("save", async function (next) {
   try {
     if (!this.role) {
       // query the userrole document, get BASIC ROLE id and assign as default role
-      const basicRole = await UserRoleModel.findOne({ value: ROLE_TYPE.basic });
+      const basicRole = await UserRoleModel.findOne({ type: ROLE_TYPE.basic });
+      if (!basicRole) {
+        throw new ApplicationError(500, "Role not found");
+      }
       this.role = basicRole._id;
     }
     next();
   } catch (err) {
     next(err);
+  }
+});
+
+UserSchema.pre("save", async function (next) {
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(this.password, salt);
+    this.password = hashedPassword;
+    next();
+  } catch (error) {
+    next(error);
   }
 });
 

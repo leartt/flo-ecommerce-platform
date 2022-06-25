@@ -14,7 +14,7 @@ const UserRoleSchema = new Schema({
       ROLE_TYPE.admin,
       ROLE_TYPE.superadmin,
     ],
-    default: ROLE_TYPE.editor,
+    default: ROLE_TYPE.basic,
     unique: true,
     required: true,
     lowercase: true,
