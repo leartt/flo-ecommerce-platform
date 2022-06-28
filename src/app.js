@@ -6,6 +6,7 @@ const compression = require("compression");
 
 // import db connection
 const initDatabaseConnection = require("./configs/db.connection");
+const { connectRedis } = require("./configs/redis.connection");
 const errorMiddleware = require("./middlewares/error.middleware");
 
 const apiEndpoints = require("./routes/index");
@@ -32,7 +33,8 @@ const PORT = process.env.PORT || 5500;
 
 app.listen(PORT, async () => {
   const checkDatabaseConnection = await initDatabaseConnection();
-  if (!checkDatabaseConnection) {
+  const checkRedisConnection = await connectRedis();
+  if (!checkDatabaseConnection && !checkRedisConnection) {
     process.exit(0);
   }
   console.log(`App listening on port ${PORT}`);
