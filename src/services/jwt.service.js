@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { client: redisClient } = require("../configs/redis.connection");
+const ApplicationError = require("../utils/ApplicationError");
 
 const generateAccessToken = (userId) => {
   const payload = {
@@ -10,6 +11,8 @@ const generateAccessToken = (userId) => {
     expiresIn: process.env.JWT_ACCESS_EXPIRATION,
     issuer: "flo-ecommerce",
   });
+
+  if (!token) throw new ApplicationError(401, "authorization error");
 
   return token;
 };
@@ -24,7 +27,9 @@ const generateRefreshToken = async (userId) => {
     issuer: "flo-ecommerce",
   });
 
-  await redisClient.set(payload._id, refreshToken, {
+  if (!refreshToken) throw new ApplicationError(401, "authorization error");
+
+  await redisClient.set(String(payload._id), refreshToken, {
     PX: process.env.JWT_REFRESH_EXPIRATION,
   });
 
