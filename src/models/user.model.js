@@ -5,6 +5,7 @@ const UserRoleModel = require("./user-role.model");
 
 const ROLE_TYPE = require("../utils/role-types");
 const ApplicationError = require("../utils/ApplicationError");
+const { AddressSchema } = require("./address.model");
 
 const { Schema } = mongoose;
 
@@ -38,6 +39,8 @@ const UserSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "UserRole",
     },
+    shippingAddresses: [AddressSchema],
+    billingAddresses: [AddressSchema],
   },
   { timestamps: true }
 );
