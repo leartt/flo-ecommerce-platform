@@ -3,7 +3,9 @@ const ProductController = require("../../controllers/product.controller");
 
 const checkAuth = require("../../middlewares/check-auth.middleware");
 
-router.get("/", checkAuth, ProductController.handleFindProducts);
+router.get("/", ProductController.handleFindProducts);
+router.get("/categories", ProductController.handleGetCategories);
+router.get("/colors", ProductController.handleGetColors);
 router.get("/:id", ProductController.handleFindProductById);
 router.post("/", ProductController.handleAddProduct);
 router.delete("/:id", ProductController.handleDeleteProductById);

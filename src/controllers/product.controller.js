@@ -7,7 +7,10 @@ const handleAddProduct = [
   async (req, res, next) => {
     try {
       console.log(req.body);
-      const product = await ProductService.addProduct(req.body);
+      const product = await ProductService.addProduct({
+        product: req.body,
+        files: req.files,
+      });
       res.status(201).json({
         message: "Product has been added successfully",
         product,
@@ -57,9 +60,35 @@ const handleDeleteProductById = async (req, res, next) => {
   }
 };
 
+const handleGetCategories = async (req, res, next) => {
+  try {
+    const categories = await ProductService.getCategories();
+    if (categories.length === 0) {
+      throw new ApplicationError("No categories were found", 404);
+    }
+    res.status(200).json({ categories, success: true });
+  } catch (error) {
+    next(new ApplicationError(500, error.message));
+  }
+};
+
+const handleGetColors = async (req, res, next) => {
+  try {
+    const colors = await ProductService.getColors();
+    if (colors.length === 0) {
+      throw new ApplicationError("No colors were found", 404);
+    }
+    res.status(200).json({ colors, success: true });
+  } catch (error) {
+    next(new ApplicationError(500, error.message));
+  }
+};
+
 module.exports = {
   handleAddProduct,
   handleFindProducts,
   handleFindProductById,
   handleDeleteProductById,
+  handleGetCategories,
+  handleGetColors,
 };
