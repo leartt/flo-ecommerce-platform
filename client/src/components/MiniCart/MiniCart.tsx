@@ -24,9 +24,8 @@ const MiniCart = () => {
     >
       {cartItems.length > 0 ? (
         cartItems.map(item => (
-          <>
+          <div key={item._id}>
             <Box
-              key={item._id}
               sx={{
                 display: 'flex',
                 alignItems: 'center',
@@ -73,7 +72,7 @@ const MiniCart = () => {
             >
               Clear cart
             </Button>
-          </>
+          </div>
         ))
       ) : (
         <Typography variant="body1" textAlign="center">
