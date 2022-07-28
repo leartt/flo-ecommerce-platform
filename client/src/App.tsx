@@ -5,6 +5,7 @@ import Home from '@src/pages/Home';
 import About from '@src/pages/About';
 import Shop from '@src/pages/Shop';
 import Contact from '@src/pages/Contact';
+import Product from '@src/pages/Product';
 import Header from './components/Header';
 
 /* eslint-disable */
@@ -17,8 +18,9 @@ const App = () => {
         <Route path="/shop" element={<Shop />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/product/:id" element={<Product />} />
       </Routes>
-      /* used for displaying toast notification in every page */
+      {/* used for displaying toast notification in every page */}
       <ToastContainer
         position="bottom-center"
         newestOnTop={true as boolean}
