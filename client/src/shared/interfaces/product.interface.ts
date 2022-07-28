@@ -22,3 +22,20 @@ export interface Product {
 export interface CartItem extends Product {
   quantity: number;
 }
+
+export interface ProductFilter {
+  categories: string[];
+  colors: string[];
+  price: [number, number];
+}
+
+export interface Category {
+  _id: string;
+  name: string;
+}
+
+export interface Color {
+  _id: string;
+  slug: string;
+  value: string;
+}
