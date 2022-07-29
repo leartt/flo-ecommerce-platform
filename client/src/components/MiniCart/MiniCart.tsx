@@ -23,57 +23,60 @@ const MiniCart = () => {
       }}
     >
       {cartItems.length > 0 ? (
-        cartItems.map(item => (
-          <div key={item._id}>
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                borderBottom: '1px solid black',
-                padding: 1,
-              }}
-            >
-              <img
-                width={50}
-                height={50}
-                src={`${import.meta.env.VITE_API_URL}${item.images[0].replace(
-                  'src',
-                  ''
-                )}`}
-                alt="iphone"
-              />
-              <div style={{ padding: '0 5px' }}>
-                <Typography variant="body1">{item.title}</Typography>
-                <Typography variant="h6">
-                  <NumberFormat
-                    value={item.price}
-                    prefix="$"
-                    fixedDecimalScale
-                    decimalScale={2}
-                    thousandSeparator
-                    displayType="text"
-                  />
-                </Typography>
-                <Typography variant="body2">
-                  Quantity: {item.quantity}
-                </Typography>
-              </div>
-              <Close
-                sx={{ marginLeft: 'auto' }}
-                onClick={() => removeFromCart(item._id)}
-              />
-            </Box>
-            <Button
-              variant="contained"
-              color="warning"
-              fullWidth
-              sx={{ marginTop: 1 }}
-              onClick={clearCart}
-            >
-              Clear cart
-            </Button>
-          </div>
-        ))
+        <>
+          {cartItems.map(item => (
+            <div key={item._id}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  borderBottom: '1px solid black',
+                  padding: 1,
+                }}
+              >
+                <img
+                  width={50}
+                  height={50}
+                  src={`${import.meta.env.VITE_API_URL}${item.images[0].replace(
+                    'src',
+                    ''
+                  )}`}
+                  alt="iphone"
+                />
+                <div style={{ padding: '0 5px' }}>
+                  <Typography variant="body1">{item.title}</Typography>
+                  <Typography variant="h6">
+                    <NumberFormat
+                      value={item.price}
+                      prefix="$"
+                      fixedDecimalScale
+                      decimalScale={2}
+                      thousandSeparator
+                      displayType="text"
+                    />
+                  </Typography>
+                  <Typography variant="body2">
+                    Quantity: {item.quantity}
+                  </Typography>
+                </div>
+                <Close
+                  sx={{ marginLeft: 'auto' }}
+                  onClick={() => removeFromCart(item._id)}
+                />
+              </Box>
+            </div>
+          ))}
+
+          <Button
+            variant="contained"
+            color="warning"
+            fullWidth
+            sx={{ marginTop: 1 }}
+            onClick={clearCart}
+          >
+            Clear cart
+          </Button>
+        </>
       ) : (
         <Typography variant="body1" textAlign="center">
           No product in cart
