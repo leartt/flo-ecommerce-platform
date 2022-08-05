@@ -4,9 +4,15 @@ import { Product, CartItem } from '@src/shared/interfaces/product.interface';
 
 interface CartState {
   cartItems: CartItem[];
-  addToCart: (product: Product) => Promise<{ message: string }>;
+  addToCart: (
+    product: Product,
+    quantity?: number
+  ) => Promise<{ message: string }>;
   removeFromCart: (id: string | number) => void;
   clearCart: () => void;
+  totalCartPrice: () => number;
+  changeQuantity: (productId: string, quantity: number) => void;
+  decreaseQuantity: (productId: string, quantity: number) => void;
   message: {
     success: string | null;
     error: string | null;
@@ -20,19 +26,53 @@ const useCartStore = create<CartState>()(
       success: null,
       error: null,
     },
-    addToCart: async product =>
+    totalCartPrice: () => {
+      const { cartItems } = get();
+      return cartItems.reduce(
+        (prevValue, currentValue) =>
+          prevValue + currentValue.price * currentValue.quantity,
+        0
+      );
+    },
+    changeQuantity: (productId, quantity) => {
+      const { cartItems } = get();
+
+      const updatedCartItems = cartItems.map(item => {
+        if (item._id === productId) {
+          return { ...item, quantity };
+        }
+        return item;
+      });
+
+      localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+      set({ cartItems: updatedCartItems });
+    },
+    decreaseQuantity: (productId, quantity) => {
+      const { cartItems } = get();
+
+      const updatedCartItems = cartItems.map(item => {
+        if (item._id === productId) {
+          return { ...item, quantity: item.quantity - quantity };
+        }
+        return item;
+      });
+
+      localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+      set({ cartItems: updatedCartItems });
+    },
+    addToCart: async (product, quantity = 1) =>
       new Promise<{ message: string }>((resolve, reject) => {
         const { cartItems } = get();
         const newCartItems = [...cartItems];
         try {
           // check if product not in cart hence add it
           if (!cartItems.find(item => item._id === product._id)) {
-            newCartItems.push({ ...product, quantity: 1 });
+            newCartItems.push({ ...product, quantity });
           } else {
             const itemIdx = cartItems.findIndex(
               item => item._id === product._id
             );
-            newCartItems[itemIdx]!.quantity += 1;
+            newCartItems[itemIdx]!.quantity += quantity;
           }
           // save cart items in localstorage
           localStorage.setItem('cartItems', JSON.stringify(newCartItems));
