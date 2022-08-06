@@ -5,7 +5,7 @@ const useStyles = createUseStyles({
   featuredProducts: {
     padding: '100px 0',
     background: 'url(images/gradient-2-bg.jpeg)',
-    // backgroundSize: '100%',
+    backgroundSize: '100%',
     backgroundPosition: 'top right',
     backgroundRepeat: 'no-repeat',
     position: 'relative',

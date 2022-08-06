@@ -9,16 +9,18 @@ const FeaturedProductSection = () => {
   const isLoading = useProductStore(state => state.isLoading);
   const message = useProductStore(state => state.message);
   const getProducts = useProductStore(state => state.getProducts);
+  const getProductById = useProductStore(state => state.getProductById);
 
   useEffect(() => {
     getProducts();
+    getProductById('62d7fda7541a31cc819db68b');
   }, []);
 
   const classes = useStyles();
 
-  if (message.error) {
-    return <div>Something went wrong</div>;
-  }
+  // if (message.error) {
+  //   return <div>Something went wrong</div>;
+  // }
 
   return (
     <div className={classes.featuredProducts}>
