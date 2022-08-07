@@ -14,13 +14,7 @@ const MiniCart = () => {
     <Box
       sx={{
         width: '300px',
-        background: colors.grey[100],
-        position: 'absolute',
-        right: 0,
-        top: 50,
-        borderRadius: 5,
-        cursor: 'initial',
-        padding: '20px 10px',
+        padding: '5px 10px',
       }}
     >
       {cartItems.length > 0 ? (
@@ -62,8 +56,11 @@ const MiniCart = () => {
                   </Typography>
                 </div>
                 <Close
-                  sx={{ marginLeft: 'auto' }}
-                  onClick={() => removeFromCart(item._id)}
+                  sx={{ marginLeft: 'auto', cursor: 'pointer' }}
+                  onClick={e => {
+                    e.stopPropagation();
+                    removeFromCart(item._id);
+                  }}
                 />
               </Box>
             </div>
