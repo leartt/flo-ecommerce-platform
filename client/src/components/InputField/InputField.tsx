@@ -20,7 +20,6 @@ const InputField = ({
   errorField,
   ...rest
 }: Props) => {
-  console.log(rest);
   return (
     <TextField
       label={label}
