@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo, useCallback } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
@@ -8,11 +8,15 @@ import List from '@mui/material/List';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import routes from '@src/shared/routes';
 import NavigationLink from '@src/components/NavigationLink';
+import NavigationMenu from '@src/components/NavigationMenu';
 import { Badge, colors, Container } from '@mui/material';
-import { ShoppingCart } from '@mui/icons-material';
+import {
+  ShoppingCart,
+  AccountCircleRounded as AccountIcon,
+} from '@mui/icons-material';
 import useCartStore from '@src/stores/cart';
+import useAuthStore from '@src/stores/auth';
 import MiniCart from '../MiniCart';
 
 const drawerWidth = 240;
@@ -21,17 +25,33 @@ const Header = () => {
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
   const [miniCartOpen, setMiniCartOpen] = useState<boolean>(false);
   const cartItems = useCartStore(state => state.cartItems);
+  const { isLoggedIn } = useAuthStore();
 
   const CartRef = useRef();
 
   const totalCartItems = useMemo(() => {
-    console.log('inside usememo');
+    console.log('inside usememo cart items');
     return cartItems.reduce((acc, item) => item.quantity + acc, 0);
   }, [cartItems]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  /* eslint-disable */
+  // const renderNavLinks = useMemo(() => {
+  //   console.log('inside render nav links');
+  //   if (isLoggedIn) {
+  //     AccountIcon;
+  //     return authorizedNavigationLinks.map(route => (
+  //       <NavigationLink key={route.path} to={route.path} name={route.name} />
+  //     ));
+  //   } else {
+  //     return guestNavigationLinks.map(route => (
+  //       <NavigationLink key={route.path} to={route.path} name={route.name} />
+  //     ));
+  //   }
+  // }, [isLoggedIn]);
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
@@ -40,9 +60,7 @@ const Header = () => {
       </Typography>
       <Divider />
       <List sx={{ display: 'flex', flexDirection: 'column' }}>
-        {routes.map(route => (
-          <NavigationLink key={route.path} to={route.path} name={route.name} />
-        ))}
+        <NavigationMenu />
       </List>
       <Badge badgeContent={totalCartItems} color="secondary">
         <ShoppingCart color="success" />
@@ -82,13 +100,7 @@ const Header = () => {
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
               <List>
                 {/* nav links */}
-                {routes.map(route => (
-                  <NavigationLink
-                    key={route.path}
-                    to={route.path}
-                    name={route.name}
-                  />
-                ))}
+                <NavigationMenu />
                 <Badge
                   badgeContent={totalCartItems}
                   color="secondary"
