@@ -1,8 +1,9 @@
 import { Close } from '@mui/icons-material';
-import { Box, Button, colors, Typography } from '@mui/material';
+import { Box, Button, ButtonGroup, colors, Typography } from '@mui/material';
 import useCartStore from '@src/stores/cart';
 import React, { useState } from 'react';
 import NumberFormat from 'react-number-format';
+import { Link } from 'react-router-dom';
 
 const MiniCart = () => {
   const cartItems = useCartStore(state => state.cartItems);
@@ -37,6 +38,7 @@ const MiniCart = () => {
                 <img
                   width={50}
                   height={50}
+                  style={{ objectFit: 'contain' }}
                   src={`${import.meta.env.VITE_API_URL}${item.images[0].replace(
                     'src',
                     ''
@@ -67,15 +69,27 @@ const MiniCart = () => {
             </div>
           ))}
 
-          <Button
-            variant="contained"
-            color="warning"
-            fullWidth
-            sx={{ marginTop: 1 }}
-            onClick={clearCart}
-          >
-            Clear cart
-          </Button>
+          <ButtonGroup fullWidth>
+            <Button
+              variant="outlined"
+              color="warning"
+              fullWidth
+              sx={{ marginTop: 1 }}
+              onClick={clearCart}
+            >
+              Clear cart
+            </Button>
+            <Button
+              component={Link}
+              to="/cart"
+              variant="contained"
+              color="warning"
+              fullWidth
+              sx={{ marginTop: 1 }}
+            >
+              View Cart
+            </Button>
+          </ButtonGroup>
         </>
       ) : (
         <Typography variant="body1" textAlign="center">
