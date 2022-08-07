@@ -19,7 +19,6 @@ interface AuthState {
 
 const useAuthStore = create<AuthState>()(
   devtools(
-    // persist(
     /* store---------- */
     (set, get) => ({
       user: null,
@@ -40,7 +39,6 @@ const useAuthStore = create<AuthState>()(
           const { data } = await axios.post('/auth/login', loginData);
           if (data.success) {
             localStorage.setItem('access_token', data.accessToken);
-            localStorage.setItem('refresh_token', data.refreshToken);
             axios.defaults.headers.common.Authorization = `Bearer ${data.accessToken}`;
             set({
               user: data.user,
@@ -90,11 +88,6 @@ const useAuthStore = create<AuthState>()(
       },
     })
     /* ---------store */
-    //   {
-    //     name: 'auth-storage',
-    //     getStorage: () => sessionStorage,
-    //   }
-    // )
   )
 );
 
