@@ -8,31 +8,15 @@ import List from '@mui/material/List';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import NavigationLink from '@src/components/NavigationLink';
 import NavigationMenu from '@src/components/NavigationMenu';
-import { Badge, colors, Container } from '@mui/material';
-import {
-  ShoppingCart,
-  AccountCircleRounded as AccountIcon,
-} from '@mui/icons-material';
-import useCartStore from '@src/stores/cart';
-import useAuthStore from '@src/stores/auth';
-import MiniCart from '../MiniCart';
+import { Container } from '@mui/material';
+
+import CartLinkIcon from '@src/components/CartLinkIcon';
 
 const drawerWidth = 240;
 
 const Header = () => {
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
-  const [miniCartOpen, setMiniCartOpen] = useState<boolean>(false);
-  const cartItems = useCartStore(state => state.cartItems);
-  const { isLoggedIn } = useAuthStore();
-
-  const CartRef = useRef();
-
-  const totalCartItems = useMemo(() => {
-    console.log('inside usememo cart items');
-    return cartItems.reduce((acc, item) => item.quantity + acc, 0);
-  }, [cartItems]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -61,10 +45,8 @@ const Header = () => {
       <Divider />
       <List sx={{ display: 'flex', flexDirection: 'column' }}>
         <NavigationMenu />
+        <CartLinkIcon />
       </List>
-      <Badge badgeContent={totalCartItems} color="secondary">
-        <ShoppingCart color="success" />
-      </Badge>
     </Box>
   );
 
@@ -101,21 +83,7 @@ const Header = () => {
               <List>
                 {/* nav links */}
                 <NavigationMenu />
-                <Badge
-                  badgeContent={totalCartItems}
-                  color="secondary"
-                  ref={CartRef as any}
-                  sx={{ position: 'relative', cursor: 'pointer', zIndex: 10 }}
-                  onClick={() => setMiniCartOpen(!miniCartOpen)}
-                >
-                  <ShoppingCart color="action" sx={{ zIndex: 1 }} />
-                  <Box
-                    sx={{ position: 'relative' }}
-                    onClick={e => e.stopPropagation()}
-                  >
-                    {miniCartOpen && <MiniCart />}
-                  </Box>
-                </Badge>
+                <CartLinkIcon />
               </List>
             </Box>
           </Toolbar>
