@@ -21,7 +21,12 @@ const AccountMenu = ({ items }: { items: NavigationLinkType[] }) => {
   return (
     <>
       <IconButton
-        onClick={handleClick}
+        onClick={e => {
+          /* need to stop event propagation. 
+            causing bug when clicked on smartphone navmenu */
+          e.stopPropagation();
+          handleClick(e);
+        }}
         size="small"
         sx={{ ml: 2 }}
         aria-controls={open ? 'account-menu' : undefined}
