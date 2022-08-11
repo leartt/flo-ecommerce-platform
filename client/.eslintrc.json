@@ -55,6 +55,7 @@
     "no-console": "off",
     "arrow-body-style": "warn",
     "dot-notation": "off",
+    "consistent-return": "off",
     "no-restricted-exports": "off",
     "no-underscore-dangle": "off",
     "prefer-promise-reject-errors": "warn"
