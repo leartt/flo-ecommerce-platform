@@ -40,7 +40,7 @@ const CartLinkIcon = () => {
       >
         <Badge
           badgeContent={totalCartItems}
-          color="secondary"
+          color="primary"
           // ref={CartRef as any}
           sx={{ position: 'relative', cursor: 'pointer', zIndex: 10 }}
         >
