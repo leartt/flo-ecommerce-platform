@@ -18,9 +18,10 @@ import { ExpandCircleDown } from '@mui/icons-material';
 
 interface Props {
   handlePaymentSubmit: (e: any) => Promise<void>;
+  children: React.ReactNode;
 }
 
-const CheckoutPaymentSection = ({ handlePaymentSubmit }: Props) => {
+const CheckoutPaymentSection = ({ handlePaymentSubmit, children }: Props) => {
   const stripe = useStripe();
 
   const handleSubmit = e => {
@@ -46,7 +47,8 @@ const CheckoutPaymentSection = ({ handlePaymentSubmit }: Props) => {
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <form onSubmit={handleSubmit}>
+          {children}
+          <form onSubmit={handleSubmit} style={{ margin: '30px 0' }}>
             <PaymentElement />
             <Button
               variant="contained"

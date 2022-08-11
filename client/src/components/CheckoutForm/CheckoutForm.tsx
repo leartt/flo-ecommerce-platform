@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useStripe, useElements } from '@stripe/react-stripe-js';
-import { Container, Typography } from '@mui/material';
+import { Alert, AlertTitle, Container, Typography } from '@mui/material';
 import CheckoutAddressSection from '@src/components/CheckoutAddressSection';
 import CheckoutPaymentSection from '@src/components/CheckoutPaymentSection';
 import { UserShippingAddress } from '@src/shared/interfaces/user.interface';
@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
+  const [error, setError] = useState<string | null | undefined>(null);
 
   const [chosenShippingAddress, setChosenShippingAddress] =
     useState<UserShippingAddress>();
@@ -52,6 +53,7 @@ const CheckoutForm = () => {
       // Show error to your customer (for example, insufficient funds)
       toast.error(result.error.message);
       console.log(result.error.message);
+      setError(result.error.message);
     } else {
       // The payment has been processed!
       // if (result === 'succeeded') {
@@ -72,7 +74,14 @@ const CheckoutForm = () => {
         setChosenShippingAddress={setChosenShippingAddress}
         chosenShippingAddress={chosenShippingAddress}
       />
-      <CheckoutPaymentSection handlePaymentSubmit={handlePaymentSubmit} />
+      <CheckoutPaymentSection handlePaymentSubmit={handlePaymentSubmit}>
+        {error && (
+          <Alert severity="error">
+            <AlertTitle>Error</AlertTitle>
+            {error}
+          </Alert>
+        )}
+      </CheckoutPaymentSection>
     </Container>
   );
 };
