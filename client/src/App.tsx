@@ -12,9 +12,14 @@ import Cart from '@src/pages/Cart';
 import Login from '@src/pages/Login';
 import Signup from '@src/pages/Signup';
 import Product from '@src/pages/Product';
+import Checkout from '@src/pages/Checkout';
 
 import ProtectedRoutes from '@src/ProtectedRoutes';
 import useAuthStore from '@src/stores/auth';
+import PaymentStatus from '@src/pages/PaymentStatus';
+
+import theme from '@src/shared/theme';
+import { ThemeProvider } from '@mui/material/styles';
 
 /* eslint-disable */
 const App = () => {
@@ -24,33 +29,38 @@ const App = () => {
     if (isLoggedIn) {
       getLoggedInUser();
     }
+    console.log('rendering entire app');
   }, []);
 
   return (
-    <Router>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route element={<ProtectedRoutes />}>
-          <Route path="/shop" element={<Shop />} />
-          <Route path="/cart" element={<Cart />} />
-        </Route>
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/product/:id" element={<Product />} />
-      </Routes>
+    <ThemeProvider theme={theme}>
+      <Router>
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/payment/status" element={<PaymentStatus />} />
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/shop" element={<Shop />} />
+            <Route path="/cart" element={<Cart />} />
+          </Route>
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/product/:id" element={<Product />} />
+        </Routes>
 
-      {/* used for displaying toast notification in every page */}
-      <ToastContainer
-        position="bottom-center"
-        newestOnTop={true as boolean}
-        limit={3}
-        autoClose={3000}
-        hideProgressBar={true as boolean}
-      />
-    </Router>
+        {/* used for displaying toast notification in every page */}
+        <ToastContainer
+          position="bottom-center"
+          newestOnTop={true as boolean}
+          limit={3}
+          autoClose={3000}
+          hideProgressBar={true as boolean}
+        />
+      </Router>
+    </ThemeProvider>
   );
 };
 
