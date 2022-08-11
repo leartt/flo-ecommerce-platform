@@ -1,12 +1,14 @@
 import { TextField } from '@mui/material';
 import React from 'react';
 import { UseFormRegister, FieldError, RegisterOptions } from 'react-hook-form';
+import PropTypes from 'prop-types';
 
+/* eslint-disable react/require-default-props */
 interface Props {
   label: string;
   name: string;
   register: UseFormRegister<any>;
-  validationRules: RegisterOptions;
+  validationRules?: RegisterOptions;
   errorField: FieldError | undefined;
   [x: string]: any;
 }
