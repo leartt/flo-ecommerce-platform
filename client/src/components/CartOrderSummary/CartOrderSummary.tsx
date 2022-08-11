@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import useCartStore from '@src/stores/cart';
 import NumberFormat from 'react-number-format';
+import { Link } from 'react-router-dom';
 
 const CartOrderSummary = () => {
   const { totalCartPrice } = useCartStore();
@@ -90,6 +91,8 @@ const CartOrderSummary = () => {
           </Box>
           <Button
             variant="contained"
+            component={Link}
+            to="/checkout"
             sx={{
               marginTop: 5,
               bgcolor: colors.purple[300],

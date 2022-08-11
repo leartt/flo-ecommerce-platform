@@ -14,7 +14,7 @@ import {
 import { Product } from '@src/shared/interfaces/product.interface';
 import useCartStore from '@src/stores/cart';
 import NumberFormat from 'react-number-format';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 import useStyles from './styles';
 
