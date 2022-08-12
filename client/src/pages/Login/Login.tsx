@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Person, Lock, Visibility, VisibilityOff } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import InputField from '@src/components/InputField';
 import useAuthStore from '../../stores/auth';
 
@@ -26,6 +26,9 @@ interface Inputs {
 }
 
 const Login = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const {
     register,
     handleSubmit,
@@ -39,9 +42,26 @@ const Login = () => {
 
   const handleLoginSubmit: SubmitHandler<Inputs> = data => {
     const { usernameOrEmail, password } = data;
-    login({ usernameOrEmail, password });
+    login({ usernameOrEmail, password })
+      .then(result => {
+        if (result?.success) {
+          if (location.state) {
+            // eslint-disable-next-line prefer-destructuring
+            const from = (location.state as { from: string }).from;
+            navigate(from, {
+              replace: true,
+            });
+          } else {
+            navigate('/', {
+              replace: true,
+            });
+          }
+        }
+      })
+      .catch(err => console.log(err));
   };
 
+  console.log(location.state);
   console.log('render login');
 
   const showAuthMessage = () => {

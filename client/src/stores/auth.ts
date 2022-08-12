@@ -1,19 +1,22 @@
 import create from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { LoginRequestData } from '@src/shared/interfaces/auth.interface';
+import { LoginRequestData, User } from '@src/shared/interfaces/auth.interface';
 import axios from '@src/shared/http-client';
 
 interface AuthState {
-  user: any;
+  user: User | null;
   isLoggedIn: boolean;
   message: {
     success: string | null;
     error: string | null;
   };
   loading: boolean;
-  login: (loginData: LoginRequestData) => void;
+  login: (loginData: {
+    usernameOrEmail: string;
+    password: string;
+  }) => Promise<{ success: boolean } | undefined>;
   getLoggedInUser: () => void;
-  setUser: (user: any) => void;
+  setUser: (user: User) => void;
   getUsers: () => void;
 }
 
@@ -31,7 +34,6 @@ const useAuthStore = create<AuthState>()(
       setUser: user => {
         set({ user });
       },
-
       // user login
       login: async loginData => {
         set({ loading: true });
@@ -41,13 +43,14 @@ const useAuthStore = create<AuthState>()(
             localStorage.setItem('access_token', data.accessToken);
             axios.defaults.headers.common.Authorization = `Bearer ${data.accessToken}`;
             set({
-              user: data.user,
+              user: data.user as User,
               isLoggedIn: true,
               message: {
                 error: null,
                 success: 'User has been logged in successfully',
               },
             });
+            return Promise.resolve({ success: data.success });
           }
         } catch (error: any) {
           set({
@@ -56,6 +59,9 @@ const useAuthStore = create<AuthState>()(
               success: null,
             },
           });
+          return Promise.reject(
+            error.response?.data?.message || error?.message || error
+          );
         } finally {
           set({ loading: false });
         }
