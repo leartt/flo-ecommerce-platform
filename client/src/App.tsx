@@ -11,10 +11,12 @@ import Contact from '@src/pages/Contact';
 import Cart from '@src/pages/Cart';
 import Login from '@src/pages/Login';
 import Signup from '@src/pages/Signup';
+import Logout from '@src/pages/Logout';
 import Product from '@src/pages/Product';
 import Checkout from '@src/pages/Checkout';
 
 import ProtectedRoutes from '@src/ProtectedRoutes';
+import GuestRoutes from '@src/GuestRoutes';
 import useAuthStore from '@src/stores/auth';
 import PaymentStatus from '@src/pages/PaymentStatus';
 
@@ -38,13 +40,16 @@ const App = () => {
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+          <Route element={<GuestRoutes />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+          </Route>
           <Route path="/shop" element={<Shop />} />
           <Route path="/cart" element={<Cart />} />
           <Route element={<ProtectedRoutes />}>
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/payment/status" element={<PaymentStatus />} />
+            <Route path="/logout" element={<Logout />} />
           </Route>
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
