@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   Paper,
   Box,
@@ -12,9 +12,20 @@ import {
 import useCartStore from '@src/stores/cart';
 import NumberFormat from 'react-number-format';
 import { Link } from 'react-router-dom';
+import { HighlightOff } from '@mui/icons-material';
 
 const CartOrderSummary = () => {
-  const { totalCartPrice } = useCartStore();
+  const {
+    totalCartPrice,
+    applyCouponCode,
+    discount,
+    discountValue,
+    removeCouponCode,
+    subtotalCartPrice,
+  } = useCartStore();
+
+  const couponRef = useRef<any>();
+
   return (
     <Paper sx={{ padding: 4 }} elevation={2}>
       <Box>
@@ -26,7 +37,7 @@ const CartOrderSummary = () => {
         >
           Subtotal:
           <NumberFormat
-            value={totalCartPrice()}
+            value={subtotalCartPrice()}
             prefix="$"
             fixedDecimalScale
             decimalScale={2}
@@ -40,20 +51,46 @@ const CartOrderSummary = () => {
             {' '}
             Coupon Code
           </Typography>
-          <TextField
-            fullWidth
-            size="small"
-            variant="outlined"
-            placeholder="YOUR COUPON"
-          />
-          <Button
-            variant="outlined"
-            color="warning"
-            fullWidth
-            sx={{ marginTop: 1 }}
-          >
-            Apply Coupon
-          </Button>
+          {discount ? (
+            <Button
+              variant="contained"
+              color="warning"
+              fullWidth
+              sx={{
+                marginTop: 1,
+                display: 'flex',
+                justifyContent: 'space-between',
+                cursor: 'default',
+              }}
+              endIcon={
+                <HighlightOff
+                  onClick={removeCouponCode}
+                  sx={{ cursor: 'pointer' }}
+                />
+              }
+            >
+              {discount.code}
+            </Button>
+          ) : (
+            <>
+              <TextField
+                fullWidth
+                size="small"
+                variant="outlined"
+                placeholder="YOUR COUPON"
+                inputRef={couponRef}
+              />
+              <Button
+                variant="outlined"
+                color="warning"
+                fullWidth
+                sx={{ marginTop: 1 }}
+                onClick={() => applyCouponCode(couponRef.current.value)}
+              >
+                Apply Coupon
+              </Button>
+            </>
+          )}
         </Box>
         <Divider />
         <Stack paddingY={2}>
@@ -62,8 +99,8 @@ const CartOrderSummary = () => {
             <Typography variant="body1" fontWeight={700}>
               {/* need to implement discount feature */}
               <NumberFormat
-                value={0}
-                prefix="$"
+                value={discountValue()}
+                prefix="- $"
                 fixedDecimalScale
                 decimalScale={2}
                 thousandSeparator
