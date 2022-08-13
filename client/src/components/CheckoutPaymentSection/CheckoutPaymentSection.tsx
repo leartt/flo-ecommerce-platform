@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  useStripe,
-  useElements,
-  PaymentElement,
-} from '@stripe/react-stripe-js';
+import { PaymentElement } from '@stripe/react-stripe-js';
 import {
   Accordion,
   AccordionDetails,
@@ -12,22 +8,17 @@ import {
   Box,
   Button,
   colors,
+  Divider,
   Typography,
 } from '@mui/material';
-import { ExpandCircleDown } from '@mui/icons-material';
+import { ExpandCircleDown, Lock as LockIcon } from '@mui/icons-material';
 
 interface Props {
-  handlePaymentSubmit: (e: any) => Promise<void>;
+  // handlePaymentSubmit: (e: any) => Promise<void>;
   children: React.ReactNode;
 }
 
-const CheckoutPaymentSection = ({ handlePaymentSubmit, children }: Props) => {
-  const stripe = useStripe();
-
-  const handleSubmit = e => {
-    handlePaymentSubmit(e);
-  };
-
+const CheckoutPaymentSection = ({ children }: Props) => {
   return (
     <Box
       sx={{
@@ -43,22 +34,35 @@ const CheckoutPaymentSection = ({ handlePaymentSubmit, children }: Props) => {
             <Avatar sx={{ bgcolor: colors.grey[900], marginRight: 1 }}>
               2
             </Avatar>
-            Payment Details
+            Payment Information
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          {children}
-          <form onSubmit={handleSubmit} style={{ margin: '30px 0' }}>
-            <PaymentElement />
-            <Button
-              variant="contained"
-              color="secondary"
-              disabled={!stripe}
-              type="submit"
+          <Box paddingBottom={5}>
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
             >
-              Submit
-            </Button>
-          </form>
+              <Typography>Credit Card Information</Typography>
+              <Typography display="flex" alignItems="center">
+                <LockIcon sx={{ marginRight: '5px' }} /> Secure Payment
+              </Typography>
+            </Box>
+            <Divider
+              variant="fullWidth"
+              sx={{
+                borderStyle: 'dashed',
+                borderColor: 'text.secondary',
+                paddingY: 1,
+              }}
+            />
+          </Box>
+
+          {/* children show error happening on payment information */}
+          {children}
+          {/* -------- */}
+          <PaymentElement />
         </AccordionDetails>
       </Accordion>
     </Box>
