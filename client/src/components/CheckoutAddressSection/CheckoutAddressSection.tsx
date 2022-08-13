@@ -11,6 +11,7 @@ import {
   CardActions,
   CardContent,
   colors,
+  Divider,
   Grid,
   Typography,
 } from '@mui/material';
@@ -30,22 +31,19 @@ const CheckoutAddressSection = ({
   chosenShippingAddress,
 }: Props) => {
   const { user } = useAuthStore();
-  const [isAddressFormOpen, setIsAddressFormOpen] = useState<boolean>(false);
+  const [isAddNewAddressFormOpen, setIsAddNewAddressFormOpen] =
+    useState<boolean>(false);
 
   useEffect(() => {
     console.log('Rendering Checkout address section');
     // @ts-ignore
     if (user!?.shippingAddresses.length === 0) {
-      setIsAddressFormOpen(true);
+      setIsAddNewAddressFormOpen(true);
     }
   }, [user]);
 
   return (
-    <Box
-      sx={{
-        marginY: 5,
-      }}
-    >
+    <Box>
       <Accordion defaultExpanded>
         <AccordionSummary
           expandIcon={<ExpandCircleDown color="info" />}
@@ -59,8 +57,35 @@ const CheckoutAddressSection = ({
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          {!isAddressFormOpen ? (
+          {!isAddNewAddressFormOpen ? (
             <Box>
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Typography>
+                  Choose a delivery address listed below or create a new one.
+                </Typography>
+                <Button
+                  onClick={() => setIsAddNewAddressFormOpen(true)}
+                  variant="outlined"
+                  color="secondary"
+                >
+                  Add new shipping address
+                </Button>
+              </Box>
+
+              <Divider
+                variant="fullWidth"
+                sx={{
+                  borderStyle: 'dashed',
+                  borderColor: 'text.secondary',
+                  paddingY: 1,
+                  marginBottom: 2,
+                }}
+              />
+
               <Grid container spacing={2}>
                 {user?.shippingAddresses.map(shAddress => (
                   /* eslint-disable react/no-array-index-key */
@@ -69,7 +94,7 @@ const CheckoutAddressSection = ({
                       variant="outlined"
                       sx={{
                         ...(shAddress._id === chosenShippingAddress?._id && {
-                          borderColor: colors.orange[500],
+                          borderColor: 'primary.main',
                           borderWidth: 2,
                         }),
                       }}
@@ -98,7 +123,7 @@ const CheckoutAddressSection = ({
                         <Button
                           size="small"
                           variant="outlined"
-                          color="warning"
+                          color="primary"
                           disabled={
                             shAddress._id === chosenShippingAddress?._id
                           }
@@ -111,17 +136,11 @@ const CheckoutAddressSection = ({
                   </Grid>
                 ))}
               </Grid>
-              <Button
-                onClick={() => setIsAddressFormOpen(true)}
-                variant="contained"
-                color="secondary"
-                sx={{ marginY: 2 }}
-              >
-                Add new shipping address
-              </Button>
             </Box>
           ) : (
-            <AddAddressForm setIsAddressFormOpen={setIsAddressFormOpen} />
+            <AddAddressForm
+              setIsAddNewAddressFormOpen={setIsAddNewAddressFormOpen}
+            />
           )}
         </AccordionDetails>
       </Accordion>

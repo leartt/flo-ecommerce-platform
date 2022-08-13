@@ -17,10 +17,10 @@ interface Inputs {
 }
 
 interface Props {
-  setIsAddressFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsAddNewAddressFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AddAddressForm = ({ setIsAddressFormOpen }: Props) => {
+const AddAddressForm = ({ setIsAddNewAddressFormOpen }: Props) => {
   const {
     register,
     handleSubmit,
@@ -36,7 +36,7 @@ const AddAddressForm = ({ setIsAddressFormOpen }: Props) => {
         console.log(res?.data);
         if (res?.data.success) {
           setUser(res.data.user);
-          setIsAddressFormOpen(false);
+          setIsAddNewAddressFormOpen(false);
         }
       })
       .catch(err => console.log(err));
@@ -104,23 +104,17 @@ const AddAddressForm = ({ setIsAddressFormOpen }: Props) => {
           }}
           errorField={errors.postalCode}
         />
-        <Box display="flex">
+        <Box display="flex" justifyContent="space-between">
           <Button type="submit" variant="contained" color="secondary">
             Save new shipping address
           </Button>
-          <Divider
-            orientation="vertical"
-            variant="middle"
-            role="presentation"
-            flexItem
-          />
           {user!?.shippingAddresses.length > 0 && (
             <Button
-              onClick={() => setIsAddressFormOpen(false)}
-              variant="contained"
+              onClick={() => setIsAddNewAddressFormOpen(false)}
+              // variant="outlined"
               color="info"
             >
-              Choose one from saved shipping addresses
+              Choose one of saved shipping addresses
             </Button>
           )}
         </Box>
