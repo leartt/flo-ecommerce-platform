@@ -70,11 +70,13 @@ const AccountMenu = ({ items }: { items: NavigationLinkType[] }) => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        {items.map(item => (
-          <MenuItem key={item.path}>
-            <NavigationLink to={item.path} name={item.name} />
-          </MenuItem>
-        ))}
+        {items.map(item => {
+          return (
+            <MenuItem key={item.path}>
+              <NavigationLink to={item.path} name={item.name} />
+            </MenuItem>
+          );
+        })}
       </Menu>
     </>
   );
