@@ -40,8 +40,13 @@ export const guestNavigationLinks: NavigationLinkType[] = [
 export const authorizedNavigationLinks: NavigationLinkType[] = [
   ...baseNavigationLinks,
   {
-    path: '/my-profile',
-    name: 'My Profile',
+    path: '/my-account',
+    name: 'My Account',
+    isAccountMenu: true,
+  },
+  {
+    path: '/logout',
+    name: 'Logout',
     isAccountMenu: true,
   },
 ];
