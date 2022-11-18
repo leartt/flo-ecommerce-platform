@@ -1,41 +1,90 @@
 const mongoose = require("mongoose");
 const { AddressSchema } = require("./address.model");
+const nanoid = require("../utils/nanoid");
+const { ProductSchema } = require("./product.model");
 
 const { Schema } = mongoose;
 
-const ORDER_STATUS = {
+const ORDER_DELIVERY_STATUS = {
   processing: "PROCESSING",
+  verified: "VERIFIED",
   completed: "COMPLETED",
   failed: "FAILED",
 };
 
+const ExtendedProductSchema = new Schema({
+  ...ProductSchema.obj,
+  quantity: {
+    type: Number,
+  },
+});
+
 const OrderSchema = new Schema(
   {
-    status: {
+    paymentIntentId: {
+      type: String,
+      required: ["Payment Intent Id is required"],
+    },
+    orderNumber: {
+      type: String,
+      required: ["Order number must be generated"],
+      default: function () {
+        return nanoid();
+      },
+    },
+    deliveryStatus: {
       type: String,
       enum: [
-        ORDER_STATUS.processing,
-        ORDER_STATUS.completed,
-        ORDER_STATUS.failed,
+        ORDER_DELIVERY_STATUS.processing,
+        ORDER_DELIVERY_STATUS.verified,
+        ORDER_DELIVERY_STATUS.completed,
+        ORDER_DELIVERY_STATUS.failed,
       ],
       required: ["Order status is required"],
-      default: ORDER_STATUS.processing,
+      default: ORDER_DELIVERY_STATUS.processing,
+      uppercase: true,
+    },
+    paymentStatus: {
+      type: String,
+      required: ["Order payment status is required"],
     },
     totalPrice: {
       type: Number,
       required: ["Order total price is required"],
     },
-    paymentMethod: {
-      type: String,
-      required: ["Order payment method is required"],
+    subtotal: {
+      type: Number,
+      required: ["Order subtotal price is required"],
     },
-    products: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Product",
-        required: ["Order should have at least a product"],
+    discount: {
+      code: { type: String },
+      percentage: { type: String },
+      value: { type: String },
+    },
+    paymentMethodDetails: {
+      card: {
+        brand: {
+          type: String,
+          required: ["Card Brand is required"],
+        },
+        expMonth: {
+          type: Number,
+          required: ["Card Expiration Month is required"],
+        },
+        expYear: {
+          type: Number,
+          required: ["Card Expiration Year is required"],
+        },
+        last4Digit: {
+          type: String,
+          required: ["Card last 4 digit is required"],
+        },
       },
-    ],
+    },
+    products: {
+      type: [ExtendedProductSchema],
+      required: ["Order should have products"],
+    },
     person: {
       type: Schema.Types.ObjectId,
       ref: "User",
@@ -47,7 +96,7 @@ const OrderSchema = new Schema(
     },
     billingAddress: {
       type: AddressSchema,
-      required: ["Order should have a billing address"],
+      // required: ["Order should have a billing address"],
     },
   },
   { timestamps: true }
