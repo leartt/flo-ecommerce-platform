@@ -15,13 +15,16 @@ const AddressSchema = new Schema({
     type: String,
     required: ["Country is a required field"],
   },
-  street: {
+  line1: {
     type: String,
-    required: ["Street is a required field"],
+    required: ["Line 1/Street address is a required field"],
   },
-  zipCode: {
+  line2: {
     type: String,
-    required: ["Zip Code is a required field"],
+  },
+  postalCode: {
+    type: String,
+    required: ["Postal code is a required field"],
   },
 });
 
