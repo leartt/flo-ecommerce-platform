@@ -1,3 +1,17 @@
+import { UserShippingAddress } from '@src/shared/interfaces/user.interface';
+
+interface UserRole {
+  type: 'basic' | 'editor' | 'admin' | 'superadmin';
+  privileges: string[];
+}
+
+// {
+//   basic: 'basic';
+//   editor: 'editor';
+//   admin: 'admin';
+//   superadmin: 'superadmin';
+// };
+
 export interface User {
   _id: string;
   firstName: string;
@@ -6,13 +20,22 @@ export interface User {
   email: string;
   createdAt: string;
   updatedAt: string;
-  role: any;
+  role: UserRole;
   __v: string | number;
-  shippingAddresses: [any];
+  shippingAddresses: [UserShippingAddress];
   billingAddresses: [any];
 }
 
 export interface LoginRequestData {
   usernameOrEmail: string;
   password: string;
+}
+
+export interface SignupRequestData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  username: string;
+  password: string;
+  confirmPassword: string;
 }

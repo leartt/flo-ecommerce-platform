@@ -7,7 +7,14 @@ export interface Product {
   price: number;
   color: any;
   categories: any[];
-  ratings: (string | number)[];
+  ratings: {
+    userId: {
+      _id: string;
+      firstName: string;
+      lastName: string;
+    };
+    value: number;
+  }[];
   images: string[];
   specifications: {
     cpu: string;
@@ -38,4 +45,9 @@ export interface Color {
   _id: string;
   slug: string;
   value: string;
+}
+
+export interface PaginationReqData {
+  limit?: number;
+  page?: number;
 }
