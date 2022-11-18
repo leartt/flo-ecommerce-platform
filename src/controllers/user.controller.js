@@ -67,9 +67,50 @@ const handleDeleteUserById = async (req, res, next) => {
   }
 };
 
+const handleUpdateMyProfile = async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+    const { firstName, lastName } = req.body;
+    console.log(req.body);
+    const user = await UserService.updateMyProfile({
+      userId,
+      firstName,
+      lastName,
+    });
+    if (!user) throw new ApplicationError(404, "User not found");
+
+    res.status(200).json({ success: true, user });
+  } catch (error) {
+    if (error.name === "ApplicationError") {
+      next(error);
+    }
+    next(new ApplicationError(500, error));
+  }
+};
+
+const handleAddUserShippingAddress = async (req, res, next) => {
+  try {
+    const { user } = req;
+    const shippingAddress = req.body;
+    if (!user) {
+      throw new ApplicationError(401, "Unauthorized");
+    }
+
+    const { updatedUser } = await UserService.addUserShippingAddress({
+      shippingAddress,
+      user,
+    });
+    res.status(200).json({ success: true, user: updatedUser });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   handleAddNewUser,
   handleGetUserById,
   handleGetUsers,
   handleDeleteUserById,
+  handleAddUserShippingAddress,
+  handleUpdateMyProfile,
 };
