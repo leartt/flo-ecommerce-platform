@@ -17,13 +17,37 @@ const handleAddProduct = [
         success: true,
       });
     } catch (error) {
-      next(new ApplicationError(500, error.message));
+      next(error);
+    }
+  },
+];
+
+const handleEditProduct = [
+  upload.array("images"),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      console.log(req.body);
+      console.log(req.files);
+
+      const product = await ProductService.editProduct({
+        id,
+        newData: req.body,
+        files: req.files,
+      });
+      if (!product) {
+        throw new ApplicationError("No product were found", 404);
+      }
+      res.status(200).json({ product, success: true });
+    } catch (error) {
+      next(error);
     }
   },
 ];
 
 const handleFindProducts = async (req, res, next) => {
   try {
+    /* eslint-disable */
     const products = await ProductService.findProducts();
     if (products.length === 0) {
       throw new ApplicationError("No products were found", 404);
@@ -60,6 +84,28 @@ const handleDeleteProductById = async (req, res, next) => {
   }
 };
 
+const handleRateProduct = async (req, res, next) => {
+  try {
+    const { productId } = req.params;
+    const { userId, ratingValue } = req.body;
+    const product = await ProductService.rateProduct({
+      productId,
+      userId,
+      ratingValue,
+    });
+    if (!product) {
+      throw new ApplicationError(500, "Error while rating the product");
+    }
+
+    res.status(200).json({
+      success: true,
+      product,
+    });
+  } catch (error) {
+    next(new ApplicationError(500, error.message));
+  }
+};
+
 const handleGetCategories = async (req, res, next) => {
   try {
     const categories = await ProductService.getCategories();
@@ -88,6 +134,8 @@ module.exports = {
   handleAddProduct,
   handleFindProducts,
   handleFindProductById,
+  handleEditProduct,
+  handleRateProduct,
   handleDeleteProductById,
   handleGetCategories,
   handleGetColors,
