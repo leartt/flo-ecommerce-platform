@@ -47,9 +47,26 @@ const ProductSchema = new Schema(
     categories: {
       type: [CategorySchema],
     },
-    ratings: [Number],
+    ratings: {
+      type: [
+        {
+          userId: {
+            type: Schema.Types.ObjectId,
+            required: ["Rating user id is required"],
+          },
+          value: {
+            type: Number,
+            required: ["Product rating value is required"],
+            min: 0,
+            max: 5,
+          },
+        },
+      ],
+    },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Product", ProductSchema);
+const ProductModel = mongoose.model("Product", ProductSchema);
+
+module.exports = { ProductModel, ProductSchema };
