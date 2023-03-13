@@ -1,15 +1,16 @@
 ## Application Screenshoots
 
+###### Below are some screenshots of the application.
 
 Shop Page
 ![Shop Page](https://user-images.githubusercontent.com/35147234/224822886-b78f614a-c8d9-469d-9e4e-89bd0d8bf380.png)
 
 
-Shoping Cart
+Shopping Cart
 ![Shoping Cart](https://user-images.githubusercontent.com/35147234/224822670-2348b0aa-cdea-4313-8412-30a058d217e1.png)
 
 
-Checkout
+Checkout Page
 ![Checkout](https://user-images.githubusercontent.com/35147234/224822953-5abd8448-9803-4eb3-8444-8a11120ea6c7.png)
 
 
